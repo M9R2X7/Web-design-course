@@ -1,0 +1,182 @@
+html{
+	font-family: "microsoft yahei,arial, helvetica, sans-serif";
+	font-size: 16px;
+}
+*{
+	margin: 0;
+	padding: 0;
+}
+li,ul,ol{
+	list-style: none;
+}
+a{
+	text-decoration: none;
+	color: #000;
+}
+.flex{
+	display: flex;
+}
+.grid {
+	display: grid;
+}
+.auto{
+	margin: 0 auto;
+}
+.clearfix::after{
+	content: '';
+	display: block;
+	clear: both;
+}
+#wrapper {
+    width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+#header {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    font-size: 24px;
+}
+.logo strong {
+    color: red;
+}
+.icons {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
+}
+#banner ,.content {
+    width: 100%;
+}
+.content p {
+    text-align: justify;
+}
+.actions {
+    width: 100%;
+    height: 40px;
+    margin: 10px 0;
+}
+.actions li {
+    width: 150px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 15px;
+    background: linear-gradient(30deg,#46B3ED,#B047A0);
+    float: right;
+}
+.actions li:hover {
+    box-shadow: 1px 1px 10px 1px #666;
+}
+.button {
+    color: #fff;
+}
+#banner .image {
+    display: block;
+    width: 100%;
+    height: 500px;
+}
+#banner .image img {
+    width: 100%;
+    height: 100%;
+}
+#con1 {
+    width: 100%;
+}
+#con1 .major {
+    margin: 10px 0;
+}
+#con1 .features {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+#con1 .features article {
+    width: 24%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    padding: 12px;
+}
+#con1 .features article:hover {
+    border-color: deepskyblue;
+}
+#con1 .features article p {
+    text-align: justify;
+    margin-top: 12px;
+}
+#con2 {
+    width: 100%;
+}
+#con2 .major {
+    height: 40px;
+    margin: 10px 0;
+}
+.posts {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+.posts article {
+    width: 32%;
+}
+.posts article .image {
+    width: 100%;
+    height: 220px;
+}
+.posts article .image img {
+    width: 100%;
+    height: 220px;
+}
+.posts article h3 {
+    margin: 10px 0;
+}
+.posts article p {
+    text-align: justify;
+}
+#search {
+    width: 95%;
+    height: 60px;
+    border-radius: 30px;
+    margin: 15px auto;
+    border: 1px solid deepskyblue;
+    overflow: hidden;
+}
+#search input {
+    width: 100%;
+    height: 60px;
+    border: 0;
+    outline: 0;
+    display: block;
+    text-indent: 2em;
+}
+#menu {
+    cursor: pointer;
+}
+#menu li {
+    line-height: 40px;
+    border-bottom: 1px dashed #ccc;
+}
+#ft {
+    width: 100%;
+    margin: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#ft p {
+    width: 40%;
+    text-align: justify;
+}
+#footer {
+    width: 100%;
+    height: 80px;
+    line-height: 80px;
+    background-color: #eee;
+    text-align: center;
+}
