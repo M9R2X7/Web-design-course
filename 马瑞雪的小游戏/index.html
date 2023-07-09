@@ -1,0 +1,303 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>马瑞雪的小游戏</title>
+    <style>
+		body {
+			height: 100%;
+			background-color: #f2e6ce;
+		}
+        .slideshow {
+			width: 300px;
+			height: auto;
+			padding-top: 450px;
+			box-sizing : border-box;
+			position: absolute;
+			top: 0;
+        }
+		.showImg{
+			position: absolute;
+			top: 300px;
+
+			width: 900px;
+			height: 600px;
+			display: grid;
+			box-sizing : border-box;
+			margin: auto auto;
+			grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+			grid-template-rows: 250px 250px;
+			gap: 40px;
+		}
+		.showImg div {
+			/* width: 18.75rem; */
+			/* height: 100%; */
+		}
+		.showImg div div{
+			font-size: 80px;
+			text-align: center;
+			font-style: normal;
+			font-weight: 700;
+		}
+		.layoutDiv {
+			border-radius: 20px;
+			margin: 0 auto;
+			display: flex;
+			justify-content: center; /*水平方向的居中*/
+			align-items: center; /*垂直方向的居中*/
+
+			width: 1600px;
+			height: 1050px;
+			background:url(img/backgroud.jpg) no-repeat center top;
+			background-size: cover;
+		}
+		.dancingImgs{
+			width: 100%;
+			height: 100%;
+			/* float: inherit; */
+		}
+
+		.faildBtnClass {
+			margin: 50px auto;
+			display: flex;
+			justify-content: center; /*水平方向的居中*/
+			align-items: center; /*垂直方向的居中*/
+			gap: 80px;
+		}
+		.textClass {
+			z-index: 999;
+			padding-top: 300px;
+			width: 100%;
+			height: 50%;
+			font-size: 100px;
+			background-color: rgba(255, 255, 255, 0.3);
+			font-weight: bold;
+			text-align: center;
+		}
+		.faildBtnClass button {
+			font-size: 80px;
+			background-color: #da858d;
+			color: #2c422e;
+			border-radius: 5px;
+			border: #fccbd4;
+			width: 200px;
+			height: 100px;
+		}
+		/* .textClass p{
+
+			padding-top: 200px;
+
+		} */
+
+    </style>
+</head>
+<body>
+	
+	<div class="layoutDiv">
+		<div class="textClass" id="overPlane" style="display: none;"><p>无</p></div>
+			
+		<div class="slideshow" id="divimg">
+		     <img src="img/imgs/1.png" alt="Image 1" id="imgId" width="300px" height="400px" onclick="a()">
+		</div>
+		<div class="showImg" id="imgsId" style="display: none;">
+			<!-- 预留用作动态添加图片 -->
+			
+		</div>
+	</div>
+	<div class="faildBtnClass">
+		<button id='faildBtn' onclick="reRun()">重开</button>
+		<button id='backBtn'onclick="backIndexPage()">返回</button>
+	<!-- <div>点击重开会重新随机选取舞蹈动作。</div> -->
+	</div>
+	<audio autoplay="autoplay" controls="controls" loop="loop" preload="auto"
+				src="img/3.wav">
+			你的浏览器版本太低，不支持audio标签
+	</audio>
+	
+    <script>
+		function a(){console.log("点击了图片");}
+		function backIndexPage(){
+			window.location.href = 'start.html';
+		}
+		//获取 上一个页面传来的参数
+		var searchUrl = window.location.href;
+		var searchData = searchUrl.split("="); //截取 url中的“=”,获得“=”后面的参数
+		var searchText = decodeURI(searchData[1]); //decodeURI解码
+		//设置间隔时间
+		var interval =  parseInt(searchText) * 1000;
+		if(isNaN(interval)) interval = 300;
+		console.log(interval);
+		//图片资源
+		var path = 'img/imgs/';
+		var all_imgs = [
+						"1.png",  "2.png", "3.png", "4.png",  "5.png",
+						"6.png", "7.png", "8.png", "9.png", "10.png",
+						 ];//getAllImgs(path);
+		var selected = [];
+		var count = 8;
+		var max_val = all_imgs.length; //系统总共保存的图片数量
+		if(count >= max_val) console.log("读取到的图片数量没有或者过少！");
+		var idxArr = [];//用来保存随机8个图片的id
+		var counter = 0;
+		var clickCount = 0;
+		var faildCount = 0;
+		var globalClickIndex = -1;//用于记录10张图片中哪张图片被点击
+		var myinterval;
+		addAllImgs("imgsId", all_imgs, idxArr, max_val, path);
+		var overPlane = document.getElementById("overPlane");
+		//为每张图片添加点击事件
+		var orClick = true;
+		var btns = document.getElementsByClassName("dancingImgs");
+		for(var i = 0; i < btns.length ; i++){
+			btns[i].onclick = (function(index){
+				if(orClick){
+					isClick = false;
+					return function(){
+						console.log("点击了" + index, "序号的图片，正确数：" + clickCount);
+						var preObj = this.previousElementSibling;
+						globalClickIndex = index;
+						if(index === idxArr[clickCount]){
+							clickCount++;
+							preObj.style.display = "inline";//显示序号
+							preObj.style.color = "greenyellow";
+							preObj.style.background = "rgba(0, 255, 0, 0.1)";
+							preObj.innerHTML = clickCount;
+							selected.push(index);
+							isClick = true;
+						}else{
+							faildCount++;
+							preObj.style.display = "inline";
+							preObj.innerHTML = "x";
+							preObj.style.background = "rgba(255, 0, 0, 0.1)";
+							preObj.style.color = "firebrick";
+							setTimeout("faildCancel()", 200);//一秒后红叉消失
+						}
+						if(clickCount >= count){
+							console.log("游戏成功！");
+							faildCount = 0;
+							clickCount = 0;
+							overPlane.style.display = "inline";
+							overPlane.style.color = "green";
+							overPlane.innerHTML = "恭喜您游戏通关！";
+						}
+						if(faildCount >= 2){
+							console.log("游戏失败！");
+							faildCount = 0;
+							clickCount = 0;
+							overPlane.style.display = "inline";
+							overPlane.style.color = "red";
+							overPlane.innerHTML = "游戏结束，您失败了！";
+						}
+						
+					}
+				}
+			})(i);
+
+		};
+		run();//运行程序
+		
+		function faildCancel(){
+			if(globalClickIndex > -1){
+				var preObj = btns[globalClickIndex].previousElementSibling;
+				preObj.style.display="none";
+				isClick = true;
+			}else{
+				console.log("没有记录的点击图片id");
+			}
+		}
+		
+		function run(){
+			clickCount = 0;
+			faildCount = 0;
+			counter = 0;
+			isClick = true;
+			var globalClickIndex = -1;
+			idxArr = getRandomInt(0, max_val-1, count);
+			console.log(idxArr);
+			myinterval = setInterval(cycle(), interval);//函数加括号立即执行一次，且只执行一次，所以函数内部需要返回自身
+		}
+		function reRun(){
+			imgsId.style.display = "none";
+			divimg.style.display = "inline";
+			faildBtn.style.display = "none";
+			overPlane.style.display = "none";
+			for(var i=0;i<selected.length;i++){
+				btns[selected[i]].previousElementSibling.style.display = "none";
+			}
+			console.log(selected);
+			selected = [];
+			run();
+		}
+		function cycle(){
+			if(counter === 0){
+				divimg.style.display = "inline";
+			}
+			if(counter >= count){
+				counter = 0;
+				console.log("播放结束！");
+				divimg.style.display = "none";
+				clearInterval(myinterval);
+				// showAllImgs("dancingImgs");
+				imgsId.style.display = "grid";
+				faildBtn.style.display = "inline";
+			}	
+			document.getElementById("imgId").src = path + all_imgs[idxArr[counter]];
+			counter++;
+			return cycle;
+		}
+
+		function getAllImgs(path){
+			imgs = [];
+			return imgs;
+		}
+		
+		//动态添加图片
+		function addAllImgs(obj, imgs, idxs, n, file) {		
+	　　　　var parent = document.getElementById(obj);
+			for(var i=0; i<n; i++){
+				//添加 div
+				var divObj = document.createElement("div");
+				divObj.setAttribute("id", "divimg" + i);
+				divObj.style.position = "relative";
+				// divObj.style.width = "300px";
+				var divMaskObj = document.createElement("div");
+				divMaskObj.setAttribute("id", "imgMask" + i);
+				divMaskObj.style.display = "none";
+				divMaskObj.style.height = "100%";
+				divMaskObj.style.width = "100%";
+				divMaskObj.style.position = "absolute";
+				divMaskObj.style.top = "0";
+				divMaskObj.style.left = "0";
+				// divMaskObj.style.opacity = "0.1";
+				divMaskObj.innerHTML = 'X';
+				
+		　　　　var imgObj = document.createElement("img");
+				imgObj.setAttribute("id", "img" + i);
+				imgObj.setAttribute("src", file + imgs[i]);
+				imgObj.setAttribute("alt", "Img" + i);
+				imgObj.setAttribute("class", "dancingImgs");
+				divObj.appendChild(divMaskObj);
+				divObj.appendChild(imgObj);
+				parent.appendChild(divObj);
+			}　
+		};
+		
+
+		//随机生成指定数量不重复的整数
+		function getRandomInt(min, max, count) {
+			var result = [];
+			if(min >= max)
+				return result
+			while (result.length < count) {
+				var num = Math.floor(Math.random() * (max - min + 1)) + min;
+				if (result.indexOf(num) === -1) {
+					result.push(num);
+				}
+			}
+			return result;
+		};
+		
+
+    </script>
+</body>
+</html>

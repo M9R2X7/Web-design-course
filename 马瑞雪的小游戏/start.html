@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>马瑞雪的小游戏</title>
+		<style>
+			body {
+				background: url(img/backgroud.jpg) repeat center;
+				background-size: cover;
+			}
+			#content {
+				display: grid;
+				box-sizing : border-box;
+				margin: auto auto;
+				grid-template-columns: 1fr;
+				grid-template-rows: 1rf 4rf 1rf 1rf;
+				grid-row-gap: 30px;
+				width: 800px;
+				height: 600px;
+			}
+			#content button{
+				font-size: 80px;
+				background-color: #da858d;
+				color: #2c422e;
+				border-radius: 30px;
+				border: #fb7593;
+			}
+			#seleced_pattern {
+				display: grid;
+				grid-template-columns: 1rf 1rf 1rf;
+				gap: 20px;
+			}
+			.prepareClass {
+				font-size: 60px;
+				color: #2c422e;
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				left: 0;
+				top: 0;
+				background-color: #f2e6ce;
+				text-align: center;
+				padding-top: 100px;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div id="textPlane" class="prepareClass" style="display: none;">
+			<p id="timeP" style="display: inline;">4</p>
+			<p style="display: inline;">秒后开始播放动作,请做好准备...</p>
+		</div>
+		<div id="content">
+			<div style="display: grid;height: 80%;">
+				<button type="button" id="btn_submit" onclick="startClicked()"> 开始游戏 </button>
+			</div>
+			<div id="seleced_pattern" style="display: none;">
+				<button type="button" class="btns">Easy</button>
+				<button type="button" class="btns">Normal</button>
+				<button type="button" class="btns">Hard</button>
+			</div>
+			<div style="display: grid;">
+				<button type="button" onclick="cancelClicked()" id="cancelBtn" style="display: none;">
+					Cancel
+				</button>
+			</div>
+		<div style="font-size: 45px;
+		            color: #fb7593;
+					text-indent: 50px;
+					text-shadow:1px 1px #a4c2ad
+					">
+			<p>游戏规则：您有三种难易程度可供选择，选择后我们将为您随机播放8个舞蹈动作，请尽可能多地记忆下它们的顺序，
+			随后请按播放的顺序依次选择并点击这些动作，您有两次试错机会！</p>
+		</div>
+		</div>
+		
+		<audio autoplay="autoplay" controls="controls" loop="loop" preload="auto" 
+					src="img/3.wav">
+		</audio>
+	</body>
+	<script>
+		var seleced_pattern = document.getElementById("seleced_pattern")
+		
+		function startClicked(){
+			console.log("开始游戏")
+			btn_submit.style.display = "none";
+			cancelBtn.style.display = "inline";
+			seleced_pattern.style.display = "grid";
+		};
+		function cancelClicked(){
+			btn_submit.style.display = "inline";
+			cancelBtn.style.display = "none"
+			seleced_pattern.style.display = "none";
+		};
+		
+		var times = [3, 2, 1]; //保存三种难度的播放间隔 
+		var interval = 1;
+		var btns = document.getElementsByClassName("btns");
+		var path = 'index.html';
+		console.log(btns.length);
+		for(var i = 0; i < btns.length ; i++){
+			btns[i].onclick = (function(index){
+				return function(){
+					// alert(times[index]);
+					document.getElementById("textPlane").style.display = "inline";
+					interval = times[index];
+					myTimer();
+				}
+			})(i);
+		};
+		
+		function myTimer()
+		    {
+		        var num=parseInt(document.getElementById("timeP").innerText);
+		        if(num==1)
+		        {
+		            url = path + "?interval=" + interval;
+		            jumpPage(url);
+		        }
+		        setTimeout("myTimer()", 1000);
+		        num--;
+		        document.getElementById("timeP").innerText=num;
+		    }
+		function jumpPage(url){
+			window.location.href = url;
+		}
+	</script>
+</html>
